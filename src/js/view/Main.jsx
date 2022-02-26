@@ -12,6 +12,9 @@ const Main = () => {
 	const urlAPI = "https://assets.breatheco.de/apis/sound/";
 
 	const [state, setState] = useState([]);
+	//Conseguir url a partir de la id
+	const [id, setId] = useState(1);
+	const [song, setSong] = useState("files/mario/songs/castle.mp3");
 
 	const getSongsDetails = () => {
 		fetch(urlAPI.concat("songs"))
@@ -31,19 +34,28 @@ const Main = () => {
 			});
 	};
 
-	var actualSong = "files/mario/songs/castle.mp3";
-
 	useEffect(() => {
 		getSongsDetails();
 	}, []);
-	const changeSong = (actualSong = inputValue.url) => {};
+
+	useEffect(() => {
+		getSongsDetails();
+		setSong(
+			state.filter((el) => {
+				return el.id == id;
+			}).url
+		);
+		console.log(song);
+	}, [id]);
+	const changeNextSong = () => {};
 
 	const listSongs = state.map((inputValue, index) => (
 		<ListGroup.Item
 			key={index}
 			className="d-flex justify-content-between align-items-start"
 			action
-			onClick={() => (actualSong = inputValue.url)}
+			//Onclick que cambie la id
+			onClick={() => setId(inputValue.id)}
 			variant="light">
 			<div className="ms-1 ">
 				<img src={cat_cover} alt="Dog cover" height="50px" />
@@ -63,13 +75,16 @@ const Main = () => {
 			<ListGroup as="ol" numbered>
 				{listSongs}
 			</ListGroup>
+			{/* Los botones añaden o descuentan uno de la id */}
+			<button>Previous</button>
 			<audio
 				controls
 				controlsList="nodownload"
 				autoPlay
 				className="container">
-				<source src={urlAPI + actualSong} type="audio/mpeg"></source>
+				<source src={urlAPI + song} type="audio/mpeg"></source>
 			</audio>
+			<button>Next</button>
 		</>
 	);
 };
