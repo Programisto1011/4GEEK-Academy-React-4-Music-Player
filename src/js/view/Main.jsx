@@ -39,15 +39,22 @@ const Main = () => {
 	}, []);
 
 	useEffect(() => {
-		getSongsDetails();
 		setSong(
 			state.filter((el) => {
 				return el.id == id;
 			}).url
 		);
 		console.log(song);
+		console.log(id);
 	}, [id]);
-	const changeNextSong = () => {};
+	const changeNextSong = () => {
+		setId(id + 1);
+		console.log(id);
+	};
+	const changePreviousSong = () => {
+		setId(id - 1);
+		console.log(id);
+	};
 
 	const listSongs = state.map((inputValue, index) => (
 		<ListGroup.Item
@@ -76,7 +83,11 @@ const Main = () => {
 				{listSongs}
 			</ListGroup>
 			{/* Los botones añaden o descuentan uno de la id */}
-			<button>Previous</button>
+			<button
+				onClick={() => changePreviousSong()}
+				disabled={id <= 1 ? true : false}>
+				Previous
+			</button>
 			<audio
 				controls
 				controlsList="nodownload"
@@ -84,7 +95,11 @@ const Main = () => {
 				className="container">
 				<source src={urlAPI + song} type="audio/mpeg"></source>
 			</audio>
-			<button>Next</button>
+			<button
+				onClick={() => changeNextSong()}
+				disabled={(id) => (state.length ? true : false)}>
+				Next
+			</button>
 		</>
 	);
 };
