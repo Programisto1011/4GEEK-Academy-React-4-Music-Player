@@ -97,7 +97,9 @@ const Main = () => {
 			</audio>
 			<button
 				onClick={() => changeNextSong()}
-				disabled={(id) => (state.length ? true : false)}>
+				disabled={
+					id == state.length || id > state.length ? true : false
+				}>
 				Next
 			</button>
 		</>
