@@ -11,7 +11,14 @@ import { ListGroup, Badge } from "react-bootstrap";
 const Main = () => {
 	const urlAPI = "https://assets.breatheco.de/apis/sound/";
 
-	const [state, setState] = useState([]);
+	const [state, setState] = useState([
+		{
+			id: 1,
+			category: "game",
+			name: "Mario Castle",
+			url: "files/mario/songs/castle.mp3",
+		},
+	]);
 	//Conseguir url a partir de la id
 	const [id, setId] = useState(1);
 	const [song, setSong] = useState("files/mario/songs/castle.mp3");
@@ -42,7 +49,7 @@ const Main = () => {
 		setSong(
 			state.filter((el) => {
 				return el.id == id;
-			}).url
+			})[0].url
 		);
 		console.log(song);
 		console.log(id);
