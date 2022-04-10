@@ -22,6 +22,7 @@ const Main = () => {
 	//Conseguir url a partir de la id
 	const [id, setId] = useState(1);
 	const [song, setSong] = useState("files/mario/songs/castle.mp3");
+	const [audioBar, setAudioBar] = useState("");
 
 	const getSongsDetails = () => {
 		fetch(urlAPI.concat("songs"))
@@ -34,7 +35,7 @@ const Main = () => {
 			.then((responseAddJSON) => {
 				console.log("Response add json", responseAddJSON);
 				setState(responseAddJSON);
-				console.log(`Store songs detail" ${state}`);
+				console.log("Store songs detail", state);
 			})
 			.catch((err) => {
 				console.error(err.message);
@@ -43,17 +44,16 @@ const Main = () => {
 
 	useEffect(() => {
 		getSongsDetails();
-	}, []);
 
-	useEffect(() => {
 		setSong(
 			state.filter((el) => {
 				return el.id == id;
 			})[0].url
 		);
-		console.log(song);
+		console.log("song: ", song);
 		console.log(id);
 	}, [id]);
+
 	const changeNextSong = () => {
 		setId(id + 1);
 		console.log(id);
@@ -84,6 +84,19 @@ const Main = () => {
 		</ListGroup.Item>
 	));
 
+	useEffect(() => {
+		console.log("Inside useEffect song", urlAPI + song);
+		setAudioBar(
+			<audio
+				controls
+				controlsList="nodownload"
+				autoPlay
+				className="container">
+				<source src={urlAPI + song} type="audio/mpeg"></source>
+			</audio>
+		);
+	}, [id]);
+
 	return (
 		<>
 			<ListGroup as="ol" numbered>
@@ -95,13 +108,7 @@ const Main = () => {
 				disabled={id <= 1 ? true : false}>
 				Previous
 			</button>
-			<audio
-				controls
-				controlsList="nodownload"
-				autoPlay
-				className="container">
-				<source src={urlAPI + song} type="audio/mpeg"></source>
-			</audio>
+			¨{audioBar}
 			<button
 				onClick={() => changeNextSong()}
 				disabled={
